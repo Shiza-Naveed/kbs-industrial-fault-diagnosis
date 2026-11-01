@@ -1,0 +1,4 @@
+group,n,KBS-sensor_rows_with_false_watch,KBS-sensor_rows_with_false_alert,KBS-sensor_true_fault_found,KBS-prior_rows_with_false_watch,KBS-prior_rows_with_false_alert,KBS-prior_true_fault_found,KBS-nodis_rows_with_false_watch,KBS-nodis_rows_with_false_alert,KBS-nodis_true_fault_found,KBS-full_rows_with_false_watch,KBS-full_rows_with_false_alert,KBS-full_true_fault_found,operator_only_false_alert
+consistent,186,0,0,163,80,40,185,32,0,164,29,0,164,
+misleading,42,1,1,21,22,13,30,35,3,21,17,3,21,
+spurious,287,1,1,0,134,63,0,261,15,0,87,15,0,287.0

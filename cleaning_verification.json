@@ -1,0 +1,17 @@
+{
+  "rows_original_clean": 10000,
+  "rows_after_cleaning": 9962,
+  "expected_rows": 9962,
+  "row_count_matches_expectation": true,
+  "untouched_rows_identical_to_original": true,
+  "rows_with_imputed_values": 147,
+  "mean_abs_imputation_error": {
+    "air_temp_k": 0.3421768707482998,
+    "process_temp_k": 0.25442176870748284,
+    "rpm": 22.85034013605442,
+    "torque_nm": 1.116326530612245,
+    "tool_wear_min": 9.92517006802721
+  },
+  "hdf_rule_agreement_imputed_rows": 0.9863945578231292,
+  "hdf_rule_agreement_original_same_rows": 1.0
+}

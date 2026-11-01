@@ -1,0 +1,20 @@
+{
+  "original_audit": {
+    "rows": 10000,
+    "missing_values": 0,
+    "duplicate_rows": 0,
+    "duplicate_udi": 0
+  },
+  "injected": {
+    "rows_with_missing_failure_label": 8,
+    "exact_duplicate_rows": 60,
+    "duplicate_udi_with_different_values": 30,
+    "type_wrong_case_or_whitespace": 25,
+    "type_missing_recoverable_from_product_id": 15,
+    "non_numeric_sensor_values": 12,
+    "physically_impossible_sensor_values": 15,
+    "missing_sensor_values": 120
+  },
+  "rows_after_injection": 10090,
+  "seed": 42
+}

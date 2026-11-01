@@ -1,0 +1,580 @@
+[
+  {
+    "id": "R01",
+    "fault": "HDF",
+    "kind": "sensor",
+    "cf": 0.95,
+    "overrides": [
+      "R02"
+    ],
+    "conditions": [
+      {
+        "fact": "delta_t",
+        "op": "<",
+        "value": 8.6
+      },
+      {
+        "fact": "rpm",
+        "op": "<",
+        "value": 1380
+      }
+    ],
+    "text": "IF temperature gap < 8.6 K AND speed < 1380 rpm THEN heat dissipation failure",
+    "source": "Matzka (2020), AI4I 2020 dataset documentation"
+  },
+  {
+    "id": "R01b",
+    "fault": "HDF",
+    "kind": "sensor",
+    "cf": 0.5,
+    "overrides": [
+      "R02"
+    ],
+    "conditions": [
+      {
+        "fact": "delta_t",
+        "op": ">=",
+        "value": 8.6
+      },
+      {
+        "fact": "delta_t",
+        "op": "<=",
+        "value": 8.6
+      },
+      {
+        "fact": "rpm",
+        "op": "<",
+        "value": 1380
+      }
+    ],
+    "text": "IF temperature gap is exactly at the 8.6 K limit AND speed < 1380 rpm THEN heat dissipation failure possible (boundary zone)",
+    "source": "Author finding: labels at the 8.6 K limit depend on floating-point rounding in the dataset; CF calibrated from history"
+  },
+  {
+    "id": "R02",
+    "fault": "HDF",
+    "kind": "sensor",
+    "cf": 0.3,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "delta_t",
+        "op": "<",
+        "value": 9.3
+      },
+      {
+        "fact": "rpm",
+        "op": "<",
+        "value": 1500
+      }
+    ],
+    "text": "IF temperature gap < 9.3 K AND speed < 1500 rpm THEN early-warning of heat dissipation failure",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R03",
+    "fault": "PWF",
+    "kind": "sensor",
+    "cf": 0.95,
+    "overrides": [
+      "R05"
+    ],
+    "conditions": [
+      {
+        "fact": "power_w",
+        "op": "<",
+        "value": 3500
+      }
+    ],
+    "text": "IF power < 3500 W THEN power failure (under-power)",
+    "source": "Matzka (2020), AI4I 2020 dataset documentation"
+  },
+  {
+    "id": "R04",
+    "fault": "PWF",
+    "kind": "sensor",
+    "cf": 0.95,
+    "overrides": [
+      "R06"
+    ],
+    "conditions": [
+      {
+        "fact": "power_w",
+        "op": ">",
+        "value": 9000
+      }
+    ],
+    "text": "IF power > 9000 W THEN power failure (over-power)",
+    "source": "Matzka (2020), AI4I 2020 dataset documentation"
+  },
+  {
+    "id": "R05",
+    "fault": "PWF",
+    "kind": "sensor",
+    "cf": 0.3,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "power_w",
+        "op": "<",
+        "value": 4000
+      }
+    ],
+    "text": "IF power < 4000 W THEN early-warning of under-power",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R06",
+    "fault": "PWF",
+    "kind": "sensor",
+    "cf": 0.3,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "power_w",
+        "op": ">",
+        "value": 8500
+      }
+    ],
+    "text": "IF power > 8500 W THEN early-warning of over-power",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R07",
+    "fault": "OSF",
+    "kind": "sensor",
+    "cf": 0.95,
+    "overrides": [
+      "R08"
+    ],
+    "conditions": [
+      {
+        "fact": "strain_ratio",
+        "op": ">",
+        "value": 1.0
+      }
+    ],
+    "text": "IF wear x torque exceeds the limit for the product type THEN overstrain failure",
+    "source": "Matzka (2020), AI4I 2020 dataset documentation"
+  },
+  {
+    "id": "R08",
+    "fault": "OSF",
+    "kind": "sensor",
+    "cf": 0.3,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "strain_ratio",
+        "op": ">",
+        "value": 0.85
+      }
+    ],
+    "text": "IF strain is above 85 % of the limit THEN early-warning of overstrain",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R09",
+    "fault": "TWF",
+    "kind": "sensor",
+    "cf": 0.8,
+    "overrides": [
+      "R10",
+      "R11"
+    ],
+    "conditions": [
+      {
+        "fact": "tool_wear_min",
+        "op": ">=",
+        "value": 240
+      }
+    ],
+    "text": "IF tool wear >= 240 min THEN tool wear failure (beyond maximum life window)",
+    "source": "Matzka (2020), AI4I 2020 dataset documentation"
+  },
+  {
+    "id": "R10",
+    "fault": "TWF",
+    "kind": "sensor",
+    "cf": 0.5,
+    "overrides": [
+      "R11"
+    ],
+    "conditions": [
+      {
+        "fact": "tool_wear_min",
+        "op": ">=",
+        "value": 200
+      }
+    ],
+    "text": "IF tool wear >= 200 min THEN tool wear failure likely (inside failure window)",
+    "source": "Matzka (2020), AI4I 2020 dataset documentation"
+  },
+  {
+    "id": "R11",
+    "fault": "TWF",
+    "kind": "sensor",
+    "cf": 0.15,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "tool_wear_min",
+        "op": ">=",
+        "value": 180
+      }
+    ],
+    "text": "IF tool wear >= 180 min THEN approaching end of tool life",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R13",
+    "fault": "TWF",
+    "kind": "observation",
+    "cf": 0.3,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_NOISE"
+      }
+    ],
+    "text": "IF operator reports unusual noise THEN tool wear failure (weak)",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R14",
+    "fault": "TWF",
+    "kind": "observation",
+    "cf": 0.25,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_FINISH"
+      }
+    ],
+    "text": "IF poor surface finish THEN tool wear failure (weak)",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R15",
+    "fault": "TWF",
+    "kind": "observation",
+    "cf": 0.15,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_VIB"
+      }
+    ],
+    "text": "IF excessive vibration THEN tool wear failure (very weak)",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R16",
+    "fault": "OSF",
+    "kind": "observation",
+    "cf": 0.15,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_VIB"
+      }
+    ],
+    "text": "IF excessive vibration THEN overstrain failure (very weak)",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R17",
+    "fault": "OSF",
+    "kind": "observation",
+    "cf": 0.4,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_STALL"
+      }
+    ],
+    "text": "IF spindle straining/stalling THEN overstrain failure",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R18",
+    "fault": "HDF",
+    "kind": "observation",
+    "cf": 0.35,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_HOT"
+      }
+    ],
+    "text": "IF housing/coolant hot THEN heat dissipation failure (weak)",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R19",
+    "fault": "HDF",
+    "kind": "observation",
+    "cf": 0.4,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_COOLANT_LOW"
+      }
+    ],
+    "text": "IF coolant flow low / alarm THEN heat dissipation failure",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R20",
+    "fault": "PWF",
+    "kind": "observation",
+    "cf": 0.4,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_BURN"
+      }
+    ],
+    "text": "IF electrical burning smell THEN power failure",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R21",
+    "fault": "PWF",
+    "kind": "observation",
+    "cf": 0.35,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_TRIP"
+      }
+    ],
+    "text": "IF drive overload trip / voltage dip THEN power failure (weak)",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R22",
+    "fault": "TWF",
+    "kind": "combined",
+    "cf": 0.6,
+    "overrides": [
+      "R13"
+    ],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_NOISE"
+      },
+      {
+        "fact": "tool_wear_min",
+        "op": ">=",
+        "value": 150
+      }
+    ],
+    "text": "IF unusual noise AND tool wear >= 150 min THEN tool wear failure",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R23",
+    "fault": "HDF",
+    "kind": "combined",
+    "cf": 0.6,
+    "overrides": [
+      "R18"
+    ],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_HOT"
+      },
+      {
+        "fact": "delta_t",
+        "op": "<",
+        "value": 9.3
+      }
+    ],
+    "text": "IF hot housing AND temperature gap < 9.3 K THEN heat dissipation failure",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R24",
+    "fault": "HDF",
+    "kind": "combined",
+    "cf": 0.65,
+    "overrides": [
+      "R19"
+    ],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_COOLANT_LOW"
+      },
+      {
+        "fact": "delta_t",
+        "op": "<",
+        "value": 9.3
+      }
+    ],
+    "text": "IF coolant low AND temperature gap < 9.3 K THEN heat dissipation failure",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R25",
+    "fault": "PWF",
+    "kind": "combined",
+    "cf": 0.65,
+    "overrides": [
+      "R20"
+    ],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_BURN"
+      },
+      {
+        "fact": "power_w",
+        "op": ">",
+        "value": 8500
+      }
+    ],
+    "text": "IF burning smell AND power > 8500 W THEN power failure",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R26",
+    "fault": "PWF",
+    "kind": "combined",
+    "cf": 0.6,
+    "overrides": [
+      "R21"
+    ],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_TRIP"
+      },
+      {
+        "fact": "power_w",
+        "op": ">",
+        "value": 8500
+      }
+    ],
+    "text": "IF overload trip AND power > 8500 W THEN power failure",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R27",
+    "fault": "OSF",
+    "kind": "combined",
+    "cf": 0.65,
+    "overrides": [
+      "R17"
+    ],
+    "conditions": [
+      {
+        "fact": "obs",
+        "op": "has",
+        "value": "S_STALL"
+      },
+      {
+        "fact": "strain_ratio",
+        "op": ">",
+        "value": 0.8
+      }
+    ],
+    "text": "IF spindle straining AND strain > 80 % of limit THEN overstrain failure",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R28",
+    "fault": "HDF",
+    "kind": "disconfirming",
+    "cf": -0.6,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "delta_t",
+        "op": ">=",
+        "value": 9.8
+      }
+    ],
+    "text": "IF temperature gap >= 9.8 K THEN evidence AGAINST heat dissipation failure",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R29",
+    "fault": "PWF",
+    "kind": "disconfirming",
+    "cf": -0.6,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "power_w",
+        "op": ">=",
+        "value": 4500
+      },
+      {
+        "fact": "power_w",
+        "op": "<=",
+        "value": 8000
+      }
+    ],
+    "text": "IF power within 4500-8000 W THEN evidence AGAINST power failure",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R30",
+    "fault": "OSF",
+    "kind": "disconfirming",
+    "cf": -0.5,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "strain_ratio",
+        "op": "<",
+        "value": 0.6
+      }
+    ],
+    "text": "IF strain < 60 % of limit THEN evidence AGAINST overstrain failure",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  },
+  {
+    "id": "R31",
+    "fault": "TWF",
+    "kind": "disconfirming",
+    "cf": -0.5,
+    "overrides": [],
+    "conditions": [
+      {
+        "fact": "tool_wear_min",
+        "op": "<",
+        "value": 120
+      }
+    ],
+    "text": "IF tool wear < 120 min THEN evidence AGAINST tool wear failure (fresh tool)",
+    "source": "Author assumption - illustrative expert estimate (validate with maintenance engineer)"
+  }
+]

@@ -1,0 +1,128 @@
+{
+  "equipment": {
+    "name": "CNC_Milling_Machine",
+    "components": {
+      "Cutting_Tool": {
+        "monitored_by": "tool_wear_min",
+        "description": "Milling cutter / insert"
+      },
+      "Cooling_System": {
+        "monitored_by": "delta_t (process - air temperature)",
+        "description": "Coolant pump, filter, fans"
+      },
+      "Motor_Drive": {
+        "monitored_by": "power_w (torque x speed)",
+        "description": "Motor, VFD, power supply"
+      },
+      "Spindle_Assembly": {
+        "monitored_by": "strain (tool wear x torque), rpm",
+        "description": "Spindle, bearings, tool holder"
+      }
+    },
+    "product_variants": {
+      "L": {
+        "strain_limit": 11000.0
+      },
+      "M": {
+        "strain_limit": 12000.0
+      },
+      "H": {
+        "strain_limit": 13000.0
+      }
+    }
+  },
+  "symptoms": {
+    "S_NOISE": {
+      "description": "Unusual grinding / squealing noise during cutting"
+    },
+    "S_VIB": {
+      "description": "Excessive vibration or chatter"
+    },
+    "S_FINISH": {
+      "description": "Poor surface finish on the machined part"
+    },
+    "S_HOT": {
+      "description": "Spindle housing or coolant hot to the touch"
+    },
+    "S_COOLANT_LOW": {
+      "description": "Low coolant flow / coolant alarm"
+    },
+    "S_BURN": {
+      "description": "Electrical burning smell"
+    },
+    "S_TRIP": {
+      "description": "Drive overload trip or lights dimming (voltage dip)"
+    },
+    "S_STALL": {
+      "description": "Spindle straining or stalling under load"
+    }
+  },
+  "faults": {
+    "TWF": {
+      "name": "Tool Wear Failure",
+      "component": "Cutting_Tool",
+      "detect": "tool_wear_min near/above 200 min (failure at a random point in 200-240 min)",
+      "causes": {
+        "C_ABRASIVE_WEAR": "Normal abrasive wear at end of tool life",
+        "C_EXCESS_CUT_TIME": "Excess cumulative cutting time without tool change",
+        "C_WRONG_TOOL_GRADE": "Tool grade unsuitable for the workpiece material"
+      },
+      "symptoms": [
+        "S_NOISE",
+        "S_FINISH",
+        "S_VIB"
+      ]
+    },
+    "HDF": {
+      "name": "Heat Dissipation Failure",
+      "component": "Cooling_System",
+      "detect": "(process - air temperature) < 8.6 K AND rotational speed < 1380 rpm",
+      "causes": {
+        "C_COOLANT_LOW": "Low coolant level or flow",
+        "C_FILTER_BLOCK": "Blocked coolant filter or failing pump",
+        "C_LOW_AIRFLOW": "Poor heat removal at low spindle speed"
+      },
+      "symptoms": [
+        "S_HOT",
+        "S_COOLANT_LOW"
+      ]
+    },
+    "PWF": {
+      "name": "Power Failure",
+      "component": "Motor_Drive",
+      "detect": "power = torque x omega < 3500 W or > 9000 W",
+      "causes": {
+        "C_SUPPLY_VOLT": "Supply voltage fluctuation",
+        "C_DRIVE_FAULT": "Drive / motor winding degradation",
+        "C_SETPOINT": "Wrong torque / speed set-point"
+      },
+      "symptoms": [
+        "S_BURN",
+        "S_TRIP"
+      ]
+    },
+    "OSF": {
+      "name": "Overstrain Failure",
+      "component": "Spindle_Assembly",
+      "detect": "tool_wear x torque > 11000 / 12000 / 13000 min*Nm for type L / M / H",
+      "causes": {
+        "C_EXCESS_DOC": "Excessive depth of cut or feed rate",
+        "C_DULL_TOOL_LOAD": "Worn tool raising the cutting load",
+        "C_BEARING": "Spindle bearing degradation"
+      },
+      "symptoms": [
+        "S_STALL",
+        "S_VIB"
+      ]
+    },
+    "RNF": {
+      "name": "Random Failure",
+      "component": "Machine",
+      "detect": "none - occurs with ~0.1 % probability irrespective of parameters",
+      "causes": {
+        "C_UNKNOWN": "Unknown transient event"
+      },
+      "symptoms": []
+    }
+  }
+}

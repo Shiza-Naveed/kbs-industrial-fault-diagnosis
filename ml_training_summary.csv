@@ -1,0 +1,26 @@
+model,target,best_params
+DT-raw,machine_failure,"{""m__max_depth"": 6, ""m__min_samples_leaf"": 5}"
+DT-raw,twf,"{""m__max_depth"": 8, ""m__min_samples_leaf"": 20}"
+DT-raw,hdf,"{""m__max_depth"": 12, ""m__min_samples_leaf"": 5}"
+DT-raw,pwf,"{""m__max_depth"": 5, ""m__min_samples_leaf"": 5}"
+DT-raw,osf,"{""m__max_depth"": 12, ""m__min_samples_leaf"": 5}"
+RF-raw,machine_failure,
+RF-raw,twf,
+RF-raw,hdf,
+RF-raw,pwf,
+RF-raw,osf,
+DT-eng,machine_failure,"{""m__max_depth"": 4, ""m__min_samples_leaf"": 5}"
+DT-eng,twf,"{""m__max_depth"": 8, ""m__min_samples_leaf"": 20}"
+DT-eng,hdf,"{""m__max_depth"": 3, ""m__min_samples_leaf"": 5}"
+DT-eng,pwf,"{""m__max_depth"": 3, ""m__min_samples_leaf"": 1}"
+DT-eng,osf,"{""m__max_depth"": 3, ""m__min_samples_leaf"": 1}"
+RF-eng,machine_failure,
+RF-eng,twf,
+RF-eng,hdf,
+RF-eng,pwf,
+RF-eng,osf,
+LR-eng,machine_failure,
+LR-eng,twf,
+LR-eng,hdf,
+LR-eng,pwf,
+LR-eng,osf,

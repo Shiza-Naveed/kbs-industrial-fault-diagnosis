@@ -1,0 +1,6 @@
+action_id,fault,action,safety_risk_1to5,downtime_h,cost_usd,spare_parts,source
+A_TWF,TWF,Replace cutting tool/insert and re-zero tool offset,2,0.5,60,Insert / tool,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_HDF,HDF,"Stop spindle, let it cool, inspect coolant level, filter and pump; clean/refill",3,2.0,150,"Coolant, filter",Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_PWF,PWF,"Isolate power, inspect drive, motor windings and supply voltage; verify torque set-point",5,4.0,400,"Fuses, drive parts",Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_OSF,OSF,"Reduce feed/depth of cut; inspect spindle bearings, tool holder and clamping",4,3.0,300,"Bearings, holder",Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_RNF,RNF,"Operator inspection, log the event and monitor for recurrence",1,0.25,20,None,Author assumption - illustrative expert estimate (validate with maintenance engineer)

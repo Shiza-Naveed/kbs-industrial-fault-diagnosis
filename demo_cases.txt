@@ -1,0 +1,303 @@
+====================================================================================================
+CASE: Normal operation
+INPUT: {'type': 'M', 'air_temp_k': 300.2, 'process_temp_k': 310.1, 'rpm': 1520, 'torque_nm': 41.0, 'tool_wear_min': 60, 'observations': ''}
+====================================================================================================
+EVIDENCE
+  - temperature gap (process - air) : 9.90 K
+  - rotational speed                : 1520 rpm
+  - mechanical power                : 6526.14 W
+  - tool wear                       : 60 min
+  - strain / limit                  : 0.20 
+  - operator observations          : none reported
+
+HOW THE DIAGNOSIS WAS REACHED (forward chaining)
+  [R29] IF power within 4500-8000 W THEN evidence AGAINST power failure  (CF -0.60, disconfirming) -> PWF
+  [R28] IF temperature gap >= 9.8 K THEN evidence AGAINST heat dissipation failure  (CF -0.60, disconfirming) -> HDF
+  [R30] IF strain < 60 % of limit THEN evidence AGAINST overstrain failure  (CF -0.50, disconfirming) -> OSF
+  [R31] IF tool wear < 120 min THEN evidence AGAINST tool wear failure (fresh tool)  (CF -0.50, disconfirming) -> TWF
+
+BELIEF PER FAULT (certainty-factor combination)
+  TWF: positive 0.00, negative -0.50 -> belief -0.50 [NONE]   rules: R31(-0.50)
+  OSF: positive 0.00, negative -0.50 -> belief -0.50 [NONE]   rules: R30(-0.50)
+  HDF: positive 0.00, negative -0.60 -> belief -0.60 [NONE]   rules: R28(-0.60)
+  PWF: positive 0.00, negative -0.60 -> belief -0.60 [NONE]   rules: R29(-0.60)
+
+RECOMMENDATION (stakeholder profile: balanced)
+  Machine status NORMAL - no maintenance action required.
+
+GOAL-DRIVEN CHECK (backward chaining) for hypothesis 'HDF'
+  [R01] REFUTED: delta_t < 8.6 -> False (value 9.90); rpm < 1380 -> False (value 1520)
+  [R01b] REFUTED: delta_t >= 8.6 -> True (value 9.90); delta_t <= 8.6 -> False (value 9.90); rpm < 1380 -> False (value 1520)
+  [R02] REFUTED: delta_t < 9.3 -> False (value 9.90); rpm < 1500 -> False (value 1520)
+  [R18] REFUTED: observation S_HOT   -> False (value [])
+  [R19] REFUTED: observation S_COOLANT_LOW   -> False (value [])
+  [R23] REFUTED: observation S_HOT   -> False (value []); delta_t < 9.3 -> False (value 9.90)
+  [R24] REFUTED: observation S_COOLANT_LOW   -> False (value []); delta_t < 9.3 -> False (value 9.90)
+  supported belief now: 0.00; best case if unknowns confirm: 0.00
+
+====================================================================================================
+CASE: Heat dissipation failure (sensor evidence + operator report)
+INPUT: {'type': 'L', 'air_temp_k': 300.0, 'process_temp_k': 308.2, 'rpm': 1300, 'torque_nm': 46.0, 'tool_wear_min': 90, 'observations': 'S_HOT'}
+====================================================================================================
+EVIDENCE
+  - temperature gap (process - air) : 8.20 K
+  - rotational speed                : 1300 rpm
+  - mechanical power                : 6262.24 W
+  - tool wear                       : 90 min
+  - strain / limit                  : 0.38 
+  - operator observations          : S_HOT
+
+HOW THE DIAGNOSIS WAS REACHED (forward chaining)
+  [R01] IF temperature gap < 8.6 K AND speed < 1380 rpm THEN heat dissipation failure  (CF +0.99, sensor) -> HDF
+  [R23] IF hot housing AND temperature gap < 9.3 K THEN heat dissipation failure  (CF +0.80, combined) -> HDF
+  [R29] IF power within 4500-8000 W THEN evidence AGAINST power failure  (CF -0.60, disconfirming) -> PWF
+  [R30] IF strain < 60 % of limit THEN evidence AGAINST overstrain failure  (CF -0.50, disconfirming) -> OSF
+  [R31] IF tool wear < 120 min THEN evidence AGAINST tool wear failure (fresh tool)  (CF -0.50, disconfirming) -> TWF
+  [R02] suppressed: overridden by more specific rule R01
+  [R18] suppressed: overridden by more specific rule R23
+
+BELIEF PER FAULT (certainty-factor combination)
+  HDF: positive 1.00, negative +0.00 -> belief +1.00 [CONFIRMED]   rules: R01(+0.99) , R23(+0.80)
+  TWF: positive 0.00, negative -0.50 -> belief -0.50 [NONE]   rules: R31(-0.50)
+  OSF: positive 0.00, negative -0.50 -> belief -0.50 [NONE]   rules: R30(-0.50)
+  PWF: positive 0.00, negative -0.60 -> belief -0.60 [NONE]   rules: R29(-0.60)
+
+RECOMMENDATION (stakeholder profile: balanced)
+  1. HDF [CONFIRMED, belief 1.00] -> IMMEDIATE: Stop spindle, let it cool, inspect coolant level, filter and pump; clean/refill
+     priority 0.501 = belief x (0.40*safety 0.60 + 0.30*downtime 0.50 + 0.30*cost 0.38)
+     est. downtime 2.0 h, cost $150, spare parts: Coolant, filter, safety risk 3/5
+     probable causes to check: Low coolant level or flow; Blocked coolant filter or failing pump; Poor heat removal at low spindle speed
+  Machine status: STOP | downtime if all IMMEDIATE actions are done: 2.0 h, cost $150
+
+GOAL-DRIVEN CHECK (backward chaining) for hypothesis 'HDF'
+  [R01] SUPPORTED: delta_t < 8.6 -> True (value 8.20); rpm < 1380 -> True (value 1300)
+  [R01b] REFUTED: delta_t >= 8.6 -> False (value 8.20); delta_t <= 8.6 -> True (value 8.20); rpm < 1380 -> True (value 1300)
+  [R02] SUPPORTED (overridden by R01): delta_t < 9.3 -> True (value 8.20); rpm < 1500 -> True (value 1300)
+  [R18] SUPPORTED (overridden by R23): observation S_HOT   -> True (value ['S_HOT'])
+  [R19] REFUTED: observation S_COOLANT_LOW   -> False (value ['S_HOT'])
+  [R23] SUPPORTED: observation S_HOT   -> True (value ['S_HOT']); delta_t < 9.3 -> True (value 8.20)
+  [R24] REFUTED: observation S_COOLANT_LOW   -> False (value ['S_HOT']); delta_t < 9.3 -> True (value 8.20)
+  supported belief now: 1.00; best case if unknowns confirm: 1.00
+
+====================================================================================================
+CASE: Conflicting evidence: operator smells burning, sensors say power is normal
+INPUT: {'type': 'M', 'air_temp_k': 299.8, 'process_temp_k': 309.7, 'rpm': 1540, 'torque_nm': 40.0, 'tool_wear_min': 80, 'observations': 'S_BURN'}
+====================================================================================================
+EVIDENCE
+  - temperature gap (process - air) : 9.90 K
+  - rotational speed                : 1540 rpm
+  - mechanical power                : 6450.74 W
+  - tool wear                       : 80 min
+  - strain / limit                  : 0.27 
+  - operator observations          : S_BURN
+
+HOW THE DIAGNOSIS WAS REACHED (forward chaining)
+  [R29] IF power within 4500-8000 W THEN evidence AGAINST power failure  (CF -0.60, disconfirming) -> PWF
+  [R28] IF temperature gap >= 9.8 K THEN evidence AGAINST heat dissipation failure  (CF -0.60, disconfirming) -> HDF
+  [R30] IF strain < 60 % of limit THEN evidence AGAINST overstrain failure  (CF -0.50, disconfirming) -> OSF
+  [R31] IF tool wear < 120 min THEN evidence AGAINST tool wear failure (fresh tool)  (CF -0.50, disconfirming) -> TWF
+  [R20] IF electrical burning smell THEN power failure  (CF +0.15, observation) -> PWF
+
+BELIEF PER FAULT (certainty-factor combination)
+  TWF: positive 0.00, negative -0.50 -> belief -0.50 [NONE]   rules: R31(-0.50)
+  OSF: positive 0.00, negative -0.50 -> belief -0.50 [NONE]   rules: R30(-0.50)
+  PWF: positive 0.15, negative -0.60 -> belief -0.53 [NONE]   rules: R29(-0.60) , R20(+0.15)
+        conflict: sensor evidence AGAINST PWF reduced the operator-based belief
+  HDF: positive 0.00, negative -0.60 -> belief -0.60 [NONE]   rules: R28(-0.60)
+
+RECOMMENDATION (stakeholder profile: balanced)
+  Machine status NORMAL - no maintenance action required.
+
+GOAL-DRIVEN CHECK (backward chaining) for hypothesis 'PWF'
+  [R03] REFUTED: power_w < 3500 -> False (value 6450.74)
+  [R04] REFUTED: power_w > 9000 -> False (value 6450.74)
+  [R05] REFUTED: power_w < 4000 -> False (value 6450.74)
+  [R06] REFUTED: power_w > 8500 -> False (value 6450.74)
+  [R20] SUPPORTED: observation S_BURN   -> True (value ['S_BURN'])
+  [R21] REFUTED: observation S_TRIP   -> False (value ['S_BURN'])
+  [R25] REFUTED: observation S_BURN   -> True (value ['S_BURN']); power_w > 8500 -> False (value 6450.74)
+  [R26] REFUTED: observation S_TRIP   -> False (value ['S_BURN']); power_w > 8500 -> False (value 6450.74)
+  supported belief now: 0.15; best case if unknowns confirm: 0.15
+
+====================================================================================================
+CASE: Tool near end of life + operator hears noise
+INPUT: {'type': 'H', 'air_temp_k': 301.0, 'process_temp_k': 311.2, 'rpm': 1480, 'torque_nm': 38.0, 'tool_wear_min': 215, 'observations': 'S_NOISE'}
+====================================================================================================
+EVIDENCE
+  - temperature gap (process - air) : 10.20 K
+  - rotational speed                : 1480 rpm
+  - mechanical power                : 5889.44 W
+  - tool wear                       : 215 min
+  - strain / limit                  : 0.63 
+  - operator observations          : S_NOISE
+
+HOW THE DIAGNOSIS WAS REACHED (forward chaining)
+  [R29] IF power within 4500-8000 W THEN evidence AGAINST power failure  (CF -0.60, disconfirming) -> PWF
+  [R22] IF unusual noise AND tool wear >= 150 min THEN tool wear failure  (CF +0.36, combined) -> TWF
+  [R28] IF temperature gap >= 9.8 K THEN evidence AGAINST heat dissipation failure  (CF -0.60, disconfirming) -> HDF
+  [R10] IF tool wear >= 200 min THEN tool wear failure likely (inside failure window)  (CF +0.06, sensor) -> TWF
+  [R11] suppressed: overridden by more specific rule R10
+  [R13] suppressed: overridden by more specific rule R22
+
+BELIEF PER FAULT (certainty-factor combination)
+  TWF: positive 0.40, negative +0.00 -> belief +0.40 [WATCH]   rules: R22(+0.36) , R10(+0.06)
+  HDF: positive 0.00, negative -0.60 -> belief -0.60 [NONE]   rules: R28(-0.60)
+  PWF: positive 0.00, negative -0.60 -> belief -0.60 [NONE]   rules: R29(-0.60)
+
+RECOMMENDATION (stakeholder profile: balanced)
+  1. TWF [WATCH, belief 0.40] -> MONITOR: Replace cutting tool/insert and re-zero tool offset
+     priority 0.097 = belief x (0.40*safety 0.40 + 0.30*downtime 0.12 + 0.30*cost 0.15)
+     est. downtime 0.5 h, cost $60, spare parts: Insert / tool, safety risk 2/5
+     probable causes to check: Normal abrasive wear at end of tool life; Excess cumulative cutting time without tool change; Tool grade unsuitable for the workpiece material
+  Machine status: OPERATE_WITH_PLAN | downtime if all IMMEDIATE actions are done: 0 h, cost $0
+
+GOAL-DRIVEN CHECK (backward chaining) for hypothesis 'TWF'
+  [R09] REFUTED: tool_wear_min >= 240 -> False (value 215)
+  [R10] SUPPORTED: tool_wear_min >= 200 -> True (value 215)
+  [R11] SUPPORTED (overridden by R10): tool_wear_min >= 180 -> True (value 215)
+  [R13] SUPPORTED (overridden by R22): observation S_NOISE   -> True (value ['S_NOISE'])
+  [R14] REFUTED: observation S_FINISH   -> False (value ['S_NOISE'])
+  [R15] REFUTED: observation S_VIB   -> False (value ['S_NOISE'])
+  [R22] SUPPORTED: observation S_NOISE   -> True (value ['S_NOISE']); tool_wear_min >= 150 -> True (value 215)
+  supported belief now: 0.40; best case if unknowns confirm: 0.40
+
+====================================================================================================
+CASE: Incomplete information: air-temperature sensor offline
+INPUT: {'type': 'M', 'air_temp_k': None, 'process_temp_k': 307.0, 'rpm': 1450, 'torque_nm': 42.0, 'tool_wear_min': 100, 'observations': 'S_COOLANT_LOW'}
+====================================================================================================
+EVIDENCE
+  - temperature gap (process - air) : n/a (missing) 
+  - rotational speed                : 1450 rpm
+  - mechanical power                : 6377.43 W
+  - tool wear                       : 100 min
+  - strain / limit                  : 0.35 
+  - operator observations          : S_COOLANT_LOW
+
+HOW THE DIAGNOSIS WAS REACHED (forward chaining)
+  [R29] IF power within 4500-8000 W THEN evidence AGAINST power failure  (CF -0.60, disconfirming) -> PWF
+  [R30] IF strain < 60 % of limit THEN evidence AGAINST overstrain failure  (CF -0.50, disconfirming) -> OSF
+  [R31] IF tool wear < 120 min THEN evidence AGAINST tool wear failure (fresh tool)  (CF -0.50, disconfirming) -> TWF
+  [R19] IF coolant flow low / alarm THEN heat dissipation failure  (CF +0.10, observation) -> HDF
+
+BELIEF PER FAULT (certainty-factor combination)
+  HDF: positive 0.10, negative +0.00 -> belief +0.10 [WATCH]   rules: R19(+0.10)
+  TWF: positive 0.00, negative -0.50 -> belief -0.50 [NONE]   rules: R31(-0.50)
+  OSF: positive 0.00, negative -0.50 -> belief -0.50 [NONE]   rules: R30(-0.50)
+  PWF: positive 0.00, negative -0.60 -> belief -0.60 [NONE]   rules: R29(-0.60)
+
+INCOMPLETE INFORMATION
+  - HDF rules could not be evaluated; missing: air_temp_k
+
+RECOMMENDATION (stakeholder profile: balanced)
+  1. HDF [WATCH, belief 0.10] -> MONITOR: Stop spindle, let it cool, inspect coolant level, filter and pump; clean/refill
+     priority 0.050 = belief x (0.40*safety 0.60 + 0.30*downtime 0.50 + 0.30*cost 0.38)
+     est. downtime 2.0 h, cost $150, spare parts: Coolant, filter, safety risk 3/5
+     probable causes to check: Low coolant level or flow; Blocked coolant filter or failing pump; Poor heat removal at low spindle speed
+  Machine status: OPERATE_WITH_PLAN | downtime if all IMMEDIATE actions are done: 0 h, cost $0
+
+GOAL-DRIVEN CHECK (backward chaining) for hypothesis 'HDF'
+  [R01] REFUTED: delta_t < 8.6 -> ? (value n/a (missing)); rpm < 1380 -> False (value 1450)
+  [R01b] REFUTED: delta_t >= 8.6 -> ? (value n/a (missing)); delta_t <= 8.6 -> ? (value n/a (missing)); rpm < 1380 -> False (value 1450)
+  [R02] UNDETERMINED: delta_t < 9.3 -> ? (value n/a (missing)); rpm < 1500 -> True (value 1450)
+  [R18] REFUTED: observation S_HOT   -> False (value ['S_COOLANT_LOW'])
+  [R19] SUPPORTED: observation S_COOLANT_LOW   -> True (value ['S_COOLANT_LOW'])
+  [R23] REFUTED: observation S_HOT   -> False (value ['S_COOLANT_LOW']); delta_t < 9.3 -> ? (value n/a (missing))
+  [R24] UNDETERMINED: observation S_COOLANT_LOW   -> True (value ['S_COOLANT_LOW']); delta_t < 9.3 -> ? (value n/a (missing))
+  supported belief now: 0.10; best case if unknowns confirm: 0.80
+  to settle the hypothesis, measure/ask: air_temp_k
+
+====================================================================================================
+CASE: Overstrain: wear x torque above the limit for type L
+INPUT: {'type': 'L', 'air_temp_k': 300.4, 'process_temp_k': 310.0, 'rpm': 1380, 'torque_nm': 62.0, 'tool_wear_min': 195, 'observations': 'S_STALL'}
+====================================================================================================
+EVIDENCE
+  - temperature gap (process - air) : 9.60 K
+  - rotational speed                : 1380 rpm
+  - mechanical power                : 8959.82 W
+  - tool wear                       : 195 min
+  - strain / limit                  : 1.10 
+  - operator observations          : S_STALL
+
+HOW THE DIAGNOSIS WAS REACHED (forward chaining)
+  [R27] IF spindle straining AND strain > 80 % of limit THEN overstrain failure  (CF +0.81, combined) -> OSF
+  [R07] IF wear x torque exceeds the limit for the product type THEN overstrain failure  (CF +0.99, sensor) -> OSF
+  [R06] IF power > 8500 W THEN early-warning of over-power  (CF +0.05, sensor) -> PWF
+  [R11] IF tool wear >= 180 min THEN approaching end of tool life  (CF +0.05, sensor) -> TWF
+  [R08] suppressed: overridden by more specific rule R07
+  [R17] suppressed: overridden by more specific rule R27
+
+BELIEF PER FAULT (certainty-factor combination)
+  OSF: positive 1.00, negative +0.00 -> belief +1.00 [CONFIRMED]   rules: R27(+0.81) , R07(+0.99)
+  TWF: positive 0.05, negative +0.00 -> belief +0.05 [NONE]   rules: R11(+0.05)
+  PWF: positive 0.05, negative +0.00 -> belief +0.05 [NONE]   rules: R06(+0.05)
+
+RECOMMENDATION (stakeholder profile: balanced)
+  1. OSF [CONFIRMED, belief 1.00] -> IMMEDIATE: Reduce feed/depth of cut; inspect spindle bearings, tool holder and clamping
+     priority 0.768 = belief x (0.40*safety 0.80 + 0.30*downtime 0.75 + 0.30*cost 0.75)
+     est. downtime 3.0 h, cost $300, spare parts: Bearings, holder, safety risk 4/5
+     probable causes to check: Excessive depth of cut or feed rate; Worn tool raising the cutting load; Spindle bearing degradation
+     SAFETY CONSTRAINT: severity >= 4/5 -> action cannot be deferred by any stakeholder profile
+  Machine status: STOP | downtime if all IMMEDIATE actions are done: 3.0 h, cost $300
+
+GOAL-DRIVEN CHECK (backward chaining) for hypothesis 'OSF'
+  [R07] SUPPORTED: strain_ratio > 1.0 -> True (value 1.10)
+  [R08] SUPPORTED (overridden by R07): strain_ratio > 0.85 -> True (value 1.10)
+  [R16] REFUTED: observation S_VIB   -> False (value ['S_STALL'])
+  [R17] SUPPORTED (overridden by R27): observation S_STALL   -> True (value ['S_STALL'])
+  [R27] SUPPORTED: observation S_STALL   -> True (value ['S_STALL']); strain_ratio > 0.8 -> True (value 1.10)
+  supported belief now: 1.00; best case if unknowns confirm: 1.00
+
+====================================================================================================
+CASE: Multiple concurrent faults (safety constraint vs stakeholder profile)
+INPUT: {'type': 'M', 'air_temp_k': 300.0, 'process_temp_k': 308.9, 'rpm': 1420, 'torque_nm': 47.0, 'tool_wear_min': 205, 'observations': 'S_COOLANT_LOW;S_STALL;S_NOISE'}
+====================================================================================================
+EVIDENCE
+  - temperature gap (process - air) : 8.90 K
+  - rotational speed                : 1420 rpm
+  - mechanical power                : 6989.00 W
+  - tool wear                       : 205 min
+  - strain / limit                  : 0.80 
+  - operator observations          : S_COOLANT_LOW, S_STALL, S_NOISE
+
+HOW THE DIAGNOSIS WAS REACHED (forward chaining)
+  [R27] IF spindle straining AND strain > 80 % of limit THEN overstrain failure  (CF +0.81, combined) -> OSF
+  [R24] IF coolant low AND temperature gap < 9.3 K THEN heat dissipation failure  (CF +0.76, combined) -> HDF
+  [R29] IF power within 4500-8000 W THEN evidence AGAINST power failure  (CF -0.60, disconfirming) -> PWF
+  [R22] IF unusual noise AND tool wear >= 150 min THEN tool wear failure  (CF +0.36, combined) -> TWF
+  [R02] IF temperature gap < 9.3 K AND speed < 1500 rpm THEN early-warning of heat dissipation failure  (CF +0.05, sensor) -> HDF
+  [R10] IF tool wear >= 200 min THEN tool wear failure likely (inside failure window)  (CF +0.06, sensor) -> TWF
+  [R11] suppressed: overridden by more specific rule R10
+  [R13] suppressed: overridden by more specific rule R22
+  [R17] suppressed: overridden by more specific rule R27
+  [R19] suppressed: overridden by more specific rule R24
+
+BELIEF PER FAULT (certainty-factor combination)
+  OSF: positive 0.81, negative +0.00 -> belief +0.81 [CONFIRMED]   rules: R27(+0.81)
+  HDF: positive 0.77, negative +0.00 -> belief +0.77 [CONFIRMED]   rules: R24(+0.76) , R02(+0.05)
+  TWF: positive 0.40, negative +0.00 -> belief +0.40 [WATCH]   rules: R22(+0.36) , R10(+0.06)
+  PWF: positive 0.00, negative -0.60 -> belief -0.60 [NONE]   rules: R29(-0.60)
+
+RECOMMENDATION (stakeholder profile: balanced)
+  1. OSF [CONFIRMED, belief 0.81] -> IMMEDIATE: Reduce feed/depth of cut; inspect spindle bearings, tool holder and clamping
+     priority 0.624 = belief x (0.40*safety 0.80 + 0.30*downtime 0.75 + 0.30*cost 0.75)
+     est. downtime 3.0 h, cost $300, spare parts: Bearings, holder, safety risk 4/5
+     probable causes to check: Excessive depth of cut or feed rate; Worn tool raising the cutting load; Spindle bearing degradation
+     SAFETY CONSTRAINT: severity >= 4/5 -> action cannot be deferred by any stakeholder profile
+  2. HDF [CONFIRMED, belief 0.77] -> IMMEDIATE: Stop spindle, let it cool, inspect coolant level, filter and pump; clean/refill
+     priority 0.388 = belief x (0.40*safety 0.60 + 0.30*downtime 0.50 + 0.30*cost 0.38)
+     est. downtime 2.0 h, cost $150, spare parts: Coolant, filter, safety risk 3/5
+     probable causes to check: Low coolant level or flow; Blocked coolant filter or failing pump; Poor heat removal at low spindle speed
+  3. TWF [WATCH, belief 0.40] -> MONITOR: Replace cutting tool/insert and re-zero tool offset
+     priority 0.097 = belief x (0.40*safety 0.40 + 0.30*downtime 0.12 + 0.30*cost 0.15)
+     est. downtime 0.5 h, cost $60, spare parts: Insert / tool, safety risk 2/5
+     probable causes to check: Normal abrasive wear at end of tool life; Excess cumulative cutting time without tool change; Tool grade unsuitable for the workpiece material
+  Machine status: STOP | downtime if all IMMEDIATE actions are done: 5.0 h, cost $450
+
+GOAL-DRIVEN CHECK (backward chaining) for hypothesis 'OSF'
+  [R07] REFUTED: strain_ratio > 1.0 -> False (value 0.80)
+  [R08] REFUTED: strain_ratio > 0.85 -> False (value 0.80)
+  [R16] REFUTED: observation S_VIB   -> False (value ['S_COOLANT_LOW', 'S_STALL', 'S_NOISE'])
+  [R17] SUPPORTED (overridden by R27): observation S_STALL   -> True (value ['S_COOLANT_LOW', 'S_STALL', 'S_NOISE'])
+  [R27] SUPPORTED: observation S_STALL   -> True (value ['S_COOLANT_LOW', 'S_STALL', 'S_NOISE']); strain_ratio > 0.8 -> True (value 0.80)
+  supported belief now: 0.81; best case if unknowns confirm: 0.81
+

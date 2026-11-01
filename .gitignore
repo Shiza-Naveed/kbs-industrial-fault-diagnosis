@@ -1,0 +1,16 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+# generated model file (re-created by `python run_all.py`, 18 MB)
+results/ml_models.joblib
+# runtime data created by the learning component
+knowledge_base/feedback_log.jsonl
+knowledge_base/rules_learned.json
+# office / OS / editor files
+~$*.docx
+.DS_Store
+.vscode/
+.idea/
+*.log

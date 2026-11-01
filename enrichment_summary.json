@@ -1,0 +1,12 @@
+{
+  "rows": 9962,
+  "train": 7969,
+  "test": 1993,
+  "observation_kind_counts": {
+    "none": 9447,
+    "spurious": 287,
+    "consistent": 186,
+    "misleading": 42
+  },
+  "test_failures": 71
+}

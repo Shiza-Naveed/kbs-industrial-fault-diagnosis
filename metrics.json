@@ -1,0 +1,74 @@
+{
+  "n_test": 1993,
+  "test_failures": 71,
+  "test_mode_counts": {
+    "TWF": 11,
+    "HDF": 16,
+    "PWF": 22,
+    "OSF": 19,
+    "RNF": 5
+  },
+  "top1_accuracy": {
+    "KBS-sensor": 0.8709677419354839,
+    "KBS-full": 0.8709677419354839,
+    "DT-raw": 0.8064516129032258,
+    "RF-raw": 0.7096774193548387,
+    "DT-eng": 0.9193548387096774,
+    "RF-eng": 0.8548387096774194,
+    "LR-eng": 0.9354838709677419
+  },
+  "n_top1_cases": 62,
+  "avoidable_cost_usd": {
+    "KBS-sensor": 4040.0,
+    "KBS-full": 5040.0,
+    "DT-raw": 25430.0,
+    "RF-raw": 22250.0,
+    "DT-eng": 9340.0,
+    "RF-eng": 5850.0,
+    "LR-eng": 42860.0
+  },
+  "macro_f1_kbs_prior": 0.7095459236326109,
+  "macro_f1_kbs_prior_no_twf": 0.902923976608187,
+  "ms_per_case": {
+    "KBS-full": 0.04485644759003744,
+    "RF-eng (one target)": 0.01954962370933089
+  },
+  "macro_f1_clean": {
+    "KBS-sensor": 0.7832480818414322,
+    "KBS-full": 0.7586780484152199,
+    "DT-raw": 0.5901694712670322,
+    "RF-raw": 0.6543628094523631,
+    "DT-eng": 0.74640522875817,
+    "RF-eng": 0.7310606060606061,
+    "LR-eng": 0.42389701602194996
+  },
+  "macro_f1_clean_no_twf": {
+    "KBS-sensor": 0.9658994032395567,
+    "KBS-full": 0.9331393586712736,
+    "DT-raw": 0.741847583310998,
+    "RF-raw": 0.8724837459364841,
+    "DT-eng": 0.9581699346405229,
+    "RF-eng": 0.9747474747474748,
+    "LR-eng": 0.5304737991403777
+  },
+  "profile_cases": {
+    "A_safety_override": {
+      "type": "M",
+      "air_temp_k": 300.0,
+      "process_temp_k": 308.9,
+      "rpm": 1420,
+      "torque_nm": 47.0,
+      "tool_wear_min": 205,
+      "observations": "S_COOLANT_LOW;S_STALL;S_NOISE"
+    },
+    "B_profile_dependent": {
+      "type": "L",
+      "air_temp_k": 300.0,
+      "process_temp_k": 308.2,
+      "rpm": 1300,
+      "torque_nm": 46.0,
+      "tool_wear_min": 190,
+      "observations": "S_NOISE"
+    }
+  }
+}

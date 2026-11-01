@@ -1,0 +1,115 @@
+subject,relation,object,source
+CNC_Milling_Machine,isA,Equipment,"Matzka (2020), AI4I 2020 dataset documentation"
+CNC_Milling_Machine,hasProductVariant,Type_L,"Matzka (2020), AI4I 2020 dataset documentation"
+Type_L,hasStrainLimit,11000,"Matzka (2020), AI4I 2020 dataset documentation"
+CNC_Milling_Machine,hasProductVariant,Type_M,"Matzka (2020), AI4I 2020 dataset documentation"
+Type_M,hasStrainLimit,12000,"Matzka (2020), AI4I 2020 dataset documentation"
+CNC_Milling_Machine,hasProductVariant,Type_H,"Matzka (2020), AI4I 2020 dataset documentation"
+Type_H,hasStrainLimit,13000,"Matzka (2020), AI4I 2020 dataset documentation"
+CNC_Milling_Machine,hasComponent,Cutting_Tool,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Cutting_Tool,monitoredBy,tool_wear_min,"Matzka (2020), AI4I 2020 dataset documentation"
+CNC_Milling_Machine,hasComponent,Cooling_System,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Cooling_System,monitoredBy,delta_t (process - air temperature),"Matzka (2020), AI4I 2020 dataset documentation"
+CNC_Milling_Machine,hasComponent,Motor_Drive,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Motor_Drive,monitoredBy,power_w (torque x speed),"Matzka (2020), AI4I 2020 dataset documentation"
+CNC_Milling_Machine,hasComponent,Spindle_Assembly,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Spindle_Assembly,monitoredBy,"strain (tool wear x torque), rpm","Matzka (2020), AI4I 2020 dataset documentation"
+TWF,isA,Fault,"Matzka (2020), AI4I 2020 dataset documentation"
+TWF,hasName,Tool Wear Failure,"Matzka (2020), AI4I 2020 dataset documentation"
+TWF,affects,Cutting_Tool,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+TWF,detectedWhen,tool_wear_min near/above 200 min (failure at a random point in 200-240 min),"Matzka (2020), AI4I 2020 dataset documentation"
+C_ABRASIVE_WEAR,isA,Cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+TWF,causedBy,C_ABRASIVE_WEAR,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+C_EXCESS_CUT_TIME,isA,Cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+TWF,causedBy,C_EXCESS_CUT_TIME,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+C_WRONG_TOOL_GRADE,isA,Cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+TWF,causedBy,C_WRONG_TOOL_GRADE,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_NOISE,indicates,TWF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_FINISH,indicates,TWF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_VIB,indicates,TWF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+HDF,isA,Fault,"Matzka (2020), AI4I 2020 dataset documentation"
+HDF,hasName,Heat Dissipation Failure,"Matzka (2020), AI4I 2020 dataset documentation"
+HDF,affects,Cooling_System,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+HDF,detectedWhen,(process - air temperature) < 8.6 K AND rotational speed < 1380 rpm,"Matzka (2020), AI4I 2020 dataset documentation"
+C_COOLANT_LOW,isA,Cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+HDF,causedBy,C_COOLANT_LOW,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+C_FILTER_BLOCK,isA,Cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+HDF,causedBy,C_FILTER_BLOCK,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+C_LOW_AIRFLOW,isA,Cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+HDF,causedBy,C_LOW_AIRFLOW,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_HOT,indicates,HDF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_COOLANT_LOW,indicates,HDF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+PWF,isA,Fault,"Matzka (2020), AI4I 2020 dataset documentation"
+PWF,hasName,Power Failure,"Matzka (2020), AI4I 2020 dataset documentation"
+PWF,affects,Motor_Drive,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+PWF,detectedWhen,power = torque x omega < 3500 W or > 9000 W,"Matzka (2020), AI4I 2020 dataset documentation"
+C_SUPPLY_VOLT,isA,Cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+PWF,causedBy,C_SUPPLY_VOLT,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+C_DRIVE_FAULT,isA,Cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+PWF,causedBy,C_DRIVE_FAULT,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+C_SETPOINT,isA,Cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+PWF,causedBy,C_SETPOINT,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_BURN,indicates,PWF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_TRIP,indicates,PWF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+OSF,isA,Fault,"Matzka (2020), AI4I 2020 dataset documentation"
+OSF,hasName,Overstrain Failure,"Matzka (2020), AI4I 2020 dataset documentation"
+OSF,affects,Spindle_Assembly,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+OSF,detectedWhen,tool_wear x torque > 11000 / 12000 / 13000 min*Nm for type L / M / H,"Matzka (2020), AI4I 2020 dataset documentation"
+C_EXCESS_DOC,isA,Cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+OSF,causedBy,C_EXCESS_DOC,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+C_DULL_TOOL_LOAD,isA,Cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+OSF,causedBy,C_DULL_TOOL_LOAD,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+C_BEARING,isA,Cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+OSF,causedBy,C_BEARING,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_STALL,indicates,OSF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_VIB,indicates,OSF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+RNF,isA,Fault,"Matzka (2020), AI4I 2020 dataset documentation"
+RNF,hasName,Random Failure,"Matzka (2020), AI4I 2020 dataset documentation"
+RNF,detectedWhen,none - occurs with ~0.1 % probability irrespective of parameters,"Matzka (2020), AI4I 2020 dataset documentation"
+C_UNKNOWN,isA,Cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+RNF,causedBy,C_UNKNOWN,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_NOISE,isA,Symptom,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_VIB,isA,Symptom,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_FINISH,isA,Symptom,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_HOT,isA,Symptom,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_COOLANT_LOW,isA,Symptom,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_BURN,isA,Symptom,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_TRIP,isA,Symptom,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+S_STALL,isA,Symptom,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_TWF,isA,MaintenanceAction,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+TWF,requires,A_TWF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_TWF,hasSafetyRisk,2,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_TWF,hasDowntimeHours,0.5,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_TWF,hasCostUSD,60,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_HDF,isA,MaintenanceAction,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+HDF,requires,A_HDF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_HDF,hasSafetyRisk,3,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_HDF,hasDowntimeHours,2.0,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_HDF,hasCostUSD,150,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_PWF,isA,MaintenanceAction,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+PWF,requires,A_PWF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_PWF,hasSafetyRisk,5,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_PWF,hasDowntimeHours,4.0,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_PWF,hasCostUSD,400,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_OSF,isA,MaintenanceAction,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+OSF,requires,A_OSF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_OSF,hasSafetyRisk,4,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_OSF,hasDowntimeHours,3.0,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_OSF,hasCostUSD,300,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_RNF,isA,MaintenanceAction,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+RNF,requires,A_RNF,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_RNF,hasSafetyRisk,1,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_RNF,hasDowntimeHours,0.25,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+A_RNF,hasCostUSD,20,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Machine_Operator,concernedWith,"Early, understandable warnings",Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Machine_Operator,concernedWith,Clear next action,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Machine_Operator,concernedWith,Ability to report observations,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Maintenance_Engineer,concernedWith,Correct fault + probable cause,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Maintenance_Engineer,concernedWith,Spare parts / skills needed,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Maintenance_Engineer,concernedWith,Explanation of how conclusion was reached,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Safety_Officer,concernedWith,No unsafe operation,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Safety_Officer,concernedWith,Hard stop on high-severity faults,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Production_Manager,concernedWith,Minimal unplanned downtime,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Production_Manager,concernedWith,Production continuity,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Maintenance_Budget_Owner,concernedWith,Low repair and downtime cost,Author assumption - illustrative expert estimate (validate with maintenance engineer)
+Maintenance_Budget_Owner,concernedWith,Avoid unnecessary part replacement,Author assumption - illustrative expert estimate (validate with maintenance engineer)

@@ -1,0 +1,52 @@
+{
+  "profiles": {
+    "safety_first": {
+      "w_safety": 0.6,
+      "w_availability": 0.2,
+      "w_cost": 0.2,
+      "description": "Safety officer: minimise risk to people and equipment"
+    },
+    "balanced": {
+      "w_safety": 0.4,
+      "w_availability": 0.3,
+      "w_cost": 0.3,
+      "description": "Default plant policy"
+    },
+    "production_first": {
+      "w_safety": 0.3,
+      "w_availability": 0.5,
+      "w_cost": 0.2,
+      "description": "Production manager: protect availability and throughput"
+    },
+    "cost_first": {
+      "w_safety": 0.3,
+      "w_availability": 0.2,
+      "w_cost": 0.5,
+      "description": "Maintenance budget owner: minimise repair cost"
+    }
+  },
+  "stakeholders": {
+    "Machine_Operator": [
+      "Early, understandable warnings",
+      "Clear next action",
+      "Ability to report observations"
+    ],
+    "Maintenance_Engineer": [
+      "Correct fault + probable cause",
+      "Spare parts / skills needed",
+      "Explanation of how conclusion was reached"
+    ],
+    "Safety_Officer": [
+      "No unsafe operation",
+      "Hard stop on high-severity faults"
+    ],
+    "Production_Manager": [
+      "Minimal unplanned downtime",
+      "Production continuity"
+    ],
+    "Maintenance_Budget_Owner": [
+      "Low repair and downtime cost",
+      "Avoid unnecessary part replacement"
+    ]
+  }
+}

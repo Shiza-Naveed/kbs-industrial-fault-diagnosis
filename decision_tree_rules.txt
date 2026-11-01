@@ -1,0 +1,59 @@
+=== Decision tree for HDF (depth 3) ===
+|--- delta_t <= 8.65
+|   |--- rpm <= 1380.00
+|   |   |--- delta_t <= 8.55
+|   |   |   |--- class: 1
+|   |   |--- delta_t >  8.55
+|   |   |   |--- class: 1
+|   |--- rpm >  1380.00
+|   |   |--- class: 0
+|--- delta_t >  8.65
+|   |--- torque_nm <= 9.50
+|   |   |--- class: 0
+|   |--- torque_nm >  9.50
+|   |   |--- class: 0
+
+=== Decision tree for PWF (depth 2) ===
+|--- power_w <= 9005.23
+|   |--- power_w <= 3499.51
+|   |   |--- class: 1
+|   |--- power_w >  3499.51
+|   |   |--- class: 0
+|--- power_w >  9005.23
+|   |--- class: 1
+
+=== Decision tree for OSF (depth 1) ===
+|--- strain_ratio <= 1.00
+|   |--- class: 0
+|--- strain_ratio >  1.00
+|   |--- class: 1
+
+=== Decision tree for TWF (depth 8) ===
+|--- tool_wear_min <= 197.50
+|   |--- air_temp_k <= 295.65
+|   |   |--- class: 0
+|   |--- air_temp_k >  295.65
+|   |   |--- class: 0
+|--- tool_wear_min >  197.50
+|   |--- power_w <= 6842.53
+|   |   |--- process_temp_k <= 312.05
+|   |   |   |--- tool_wear_min <= 202.50
+|   |   |   |   |--- rpm <= 1469.50
+|   |   |   |   |   |--- class: 1
+|   |   |   |   |--- rpm >  1469.50
+|   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |--- tool_wear_min >  202.50
+|   |   |   |   |--- delta_t <= 11.55
+|   |   |   |   |   |--- truncated branch of depth 4
+|   |   |   |   |--- delta_t >  11.55
+|   |   |   |   |   |--- class: 0
+|   |   |--- process_temp_k >  312.05
+|   |   |   |--- class: 0
+|   |--- power_w >  6842.53
+|   |   |--- torque_nm <= 59.30
+|   |   |   |--- rpm <= 1343.50
+|   |   |   |   |--- class: 0
+|   |   |   |--- rpm >  1343.50
+|   |   |   |   |--- class: 0
+|   |   |--- torque_nm >  59.30
+|   |   |   |--- class: 1

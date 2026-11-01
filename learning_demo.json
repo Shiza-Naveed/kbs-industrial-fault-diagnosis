@@ -1,0 +1,27 @@
+{
+  "rule": "R19",
+  "text": "IF coolant flow low / alarm THEN heat dissipation failure",
+  "calibrated_cf": 0.1,
+  "scenarios": [
+    {
+      "feedback": "technicians confirm 40 of 40 reports",
+      "new_cf": 0.54,
+      "hdf_belief_for_the_same_report": 0.54,
+      "level": "PROBABLE"
+    },
+    {
+      "feedback": "technicians confirm 20, reject 20",
+      "new_cf": 0.3,
+      "hdf_belief_for_the_same_report": 0.3,
+      "level": "WATCH"
+    },
+    {
+      "feedback": "technicians reject 40 of 40 reports",
+      "new_cf": 0.05,
+      "hdf_belief_for_the_same_report": 0.05,
+      "level": "NONE"
+    }
+  ],
+  "belief_before": 0.1,
+  "level_before": "WATCH"
+}
